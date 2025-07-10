@@ -34,7 +34,6 @@ async function handleSubmit(e) {
        setError(res?.data?.message || "Login failed");
        return;
    }
-   console.log(res);
    if(res?.data?.rest?.role==='user'){
     dispatch(signInSuccess(res.data));
    toast.success('Login successfull');
