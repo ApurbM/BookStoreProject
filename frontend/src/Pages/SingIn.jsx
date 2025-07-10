@@ -19,7 +19,7 @@ async function handleSubmit(e) {
     setError('');
 
     try {
-      const res = await axios.post("http://localhost:3000/api/user/register",{
+      const res = await axios.post("https://bookstoreproject-yg34.onrender.com/api/user/register",{
         username:User,
         email:Email,
         address:Address,
