@@ -72,8 +72,6 @@ const login = async (req, res, next) => {
         domain:'https://bookstoreproject-yg34.onrender.com',
         path: ' /',
         httpOnly: false,
-        secure: true,
-        sameSite: 'None',
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({
