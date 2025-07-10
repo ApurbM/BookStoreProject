@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const errorHandler = require('./error');
 
 const verifyAuth = async (req,res,next)=>{
-    try{
+     try{
        const token = req.cookies.token;
        if(!token){
         return next(errorHandler(404,"Unauthourzed user"));
