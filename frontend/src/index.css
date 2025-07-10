@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* tailwind-swiper.css */
+
+.swiper-button-prev,
+.swiper-button-next {
+  @apply top-1/2 w-10 h-10 rounded-full text-gray-800 flex items-center justify-center transition-transform duration-300;
+  transform: translateY(-50%);
+  background: none; /* Ensure no background is applied */
+  box-shadow: none;
+  border: none;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  @apply scale-110 text-gray-600;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  @apply text-2xl font-bold;
+}

@@ -9,6 +9,6 @@ const {
 
 router.put('/insert-cart',verifyAuth,insertCartBook);
 router.get('/get-cart',verifyAuth,getAllCartBook);
-router.put('/remove-cart',verifyAuth,removeBookFromCart);
+router.put('/remove-cart',removeBookFromCart);
 
 module.exports = router;

@@ -23,11 +23,11 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  paymentMethod: {
-    type: String,
-    enum: ['card', 'upi', 'netbanking', 'wallet', 'cash'],
-    required: true
-  },
+  // paymentMethod: {
+  //   type: String,
+  //   enum: ['card', 'upi', 'netbanking', 'wallet', 'cash'],
+  //   required: true
+  // },
   status: {
     type: String,
     enum: ['paid', 'pending', 'failed'],

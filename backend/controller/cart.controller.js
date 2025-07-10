@@ -11,14 +11,24 @@ const insertCartBook = async(req,res,next)=>{
             message:'Enter all details'
         })
     }
+    const loginUser = req.user;
+    if(userid !== loginUser.id){
+        return next(errorHandler(404,"Only logged in user cart is accessed"));
+    }
     const getBook = await Book.findById(bookid);
     if(!getBook){
-       return next(errorHandler(404,"book dont exist"));
+       return res.status(200).json({
+                success:false,
+                message:'Book not in storage'
+            });;
     }
      const user = await User.findById(userid);
       const verify = user.cart.includes(bookid);
          if(verify){
-            return next(errorHandler(400,"Allready in cart"));
+            return res.status(200).json({
+                success:false,
+                message:'Book already added to cart'
+            });
          }
          await User.findByIdAndUpdate(userid,{$push:{cart:bookid}});
           return res.status(202).json({
@@ -49,7 +59,7 @@ const getAllCartBook = async(req,res,next)=>{
     return res.status(202).json({
         success:true,
         message:'got all cart books',
-        favourite:user.cart
+        cart:user.cart
     })
 
     }
@@ -69,11 +79,11 @@ const removeBookFromCart = async(req,res,next)=>{
     }
     const user = await User.findById(userid);
     if(!user){
-        return next(errorHandler(404,"user not found"));
+        return next(errorHandler(202,"user not found"));
     }
     const book = await Book.findById(bookid);
     if(!book){
-        return next(errorHandler(404,'book not found'));
+        return next(errorHandler(202,'book not found'));
     }
     await User.findByIdAndUpdate(userid,{
         $pull:{cart:bookid}

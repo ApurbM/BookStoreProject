@@ -7,17 +7,24 @@ const userRoutes = require('./routes/user.routes');
 const bookRoutes = require('./routes/book.route');
 const verifyAuth = require('./utilis/verifyAuth');
 const favRuth = require('./routes/Fav.route'); 
+const cartRuth = require('./routes/cart.route');
+const paymentRoutes = require('./routes/payment.route');
 
 require('dotenv').config();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
-app.use("/uploads", express.static("uploads"));
+app.use(cors({
+    origin: 'http://localhost:5173', // your React frontend URL
+    credentials: true, // if you are using cookies or sessions
+  }));
 
+app.use("/uploads", express.static("uploads"));
 app.use('/api/user',userRoutes);
 app.use('/api/book',bookRoutes);
 app.use('/api/fav',favRuth);
+app.use('/api/cart',cartRuth);
+app.use('/api/payment', paymentRoutes);
 
 mongoose.connect(process.env.DB_LINK).then(()=>{
     console.log("Data base connected")
