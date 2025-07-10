@@ -2,13 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const API_URL = 'http://localhost:3000/api/cart';
+const baseURL = 'https://bookstoreproject-yg34.onrender.com/api/cart';
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async (userid, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/get-cart`, {
+      const res = await axios({
+        method: 'get',
+        url: '/get-cart',
+        baseURL,
         headers: { userid },
         withCredentials: true,
       });
@@ -24,7 +27,10 @@ export const addToCart = createAsyncThunk(
   async ({ book, userid }, { rejectWithValue }) => {
     try {
       const bookid = book._id;
-      const res = await axios.put(`${API_URL}/insert-cart`, {}, {
+      const res = await axios({
+        method: 'put',
+        url: '/insert-cart',
+        baseURL,
         headers: { userid, bookid },
         withCredentials: true,
       });
@@ -45,7 +51,10 @@ export const removeFromCart = createAsyncThunk(
   async ({ book, userid }, { rejectWithValue }) => {
     try {
       const bookid = book._id;
-      await axios.put(`${API_URL}/remove-cart`, {}, {
+      await axios({
+        method: 'put',
+        url: '/remove-cart',
+        baseURL,
         headers: { bookid, userid },
         withCredentials: true,
       });
@@ -64,14 +73,14 @@ const cartSlice = createSlice({
     items: [],
     loading: true,
     error: null,
-    isF:false
+    isF: false
   },
   reducers: {
     clearCart(state) {
       state.items = [];
-      state.loading=true;
+      state.loading = true;
       state.error = null;
-       state.isF = false;
+      state.isF = false;
     },
   },
   extraReducers: (builder) => {
