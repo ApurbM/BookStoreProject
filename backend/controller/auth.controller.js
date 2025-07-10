@@ -68,10 +68,9 @@ const login = async (req, res, next) => {
     return res
       .cookie('token', token, {
         secure:true,
-        sameSite:'none',
+        sameSite:'None',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        domain:'https://bookstoreproject-yg34.onrender.com'
       })
       .json({
         success: true,
