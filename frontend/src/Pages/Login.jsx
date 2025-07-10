@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import axios from 'axios';
 import { signInFailure , signInStart , signInSuccess } from '../Redux/userslice';
+import {fetchCart} from '../Redux/cartSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
@@ -31,16 +32,16 @@ async function handleSubmit(e) {
    if(res?.data?.success === false){
        dispatch(signInFailure(res.data.message))
        setError(res?.data?.message || "Login failed");
+       return;
    }
    dispatch(signInSuccess(res.data));
    toast.success('Login successfull');
    if(res?.data?.rest?.role==='user'){
     navigate('/');
    }
-   else{
+   else if(res?.data?.rest?.role=='admin'){
      navigate('/admin');
    }
-
   }
   catch(err){
     console.log(err);

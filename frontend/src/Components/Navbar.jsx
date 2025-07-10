@@ -3,6 +3,7 @@ import { Slack, Search, ShoppingCart, Menu } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import avatar from '../assets/avatar.png';
 import { signOutSuccess,signOutFailure,signOutStart } from '../Redux/userslice';
+import {clearCart} from '../Redux/cartSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -49,6 +50,7 @@ async function handleLogout() {
 
     dispatch(signOutSuccess());
     toast.success("Logout successful");
+    dispatch(clearCart());
     navigate("/login");
   } catch (err) {
     console.log(err);
@@ -66,7 +68,7 @@ return (
         <div className="flex items-center gap-3">
           <Slack size={34} color="red" />
           <div className="relative w-full max-w-[10rem] sm:max-w-xs md:max-w-md lg:max-w-lg">
-  <input
+  <input 
     type="text"
     placeholder="Enter book name"
     className="bg-gray-100 w-full px-4 py-2 rounded-full outline-none shadow-sm text-sm sm:text-base"

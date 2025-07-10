@@ -5,10 +5,10 @@ import axios from 'axios';
 
 export default function Order() {
   const dispatch = useDispatch();
-  const { items, loading } = useSelector((state) => state.cart);
+  const { items, loading,isF } = useSelector((state) => state.cart);
   const userid = useSelector((state) => state.user.CurrentUser.rest._id);
   const [paying, setPaying] = useState(false);
-
+  // console.log(loading);
   useEffect(() => {
     if (userid && items.length === 0) {
       dispatch(fetchCart(userid));
@@ -78,7 +78,8 @@ export default function Order() {
       setPaying(false);
     }
   };
-
+console.log(isF);
+ if(isF==false) return <>loading.....</>
   return (
     <div className="min-h-screen bg-[#f9f9f9] px-4 py-10">
       <h2 className="text-3xl font-bold text-center mb-10 text-[#222] tracking-wide">

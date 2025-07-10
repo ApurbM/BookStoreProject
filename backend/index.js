@@ -26,11 +26,18 @@ app.use('/api/fav',favRuth);
 app.use('/api/cart',cartRuth);
 app.use('/api/payment', paymentRoutes);
 
-mongoose.connect(process.env.DB_LINK).then(()=>{
-    console.log("Data base connected")
-}).catch((err)=>{
-    console.log(err)
+mongoose.connect(process.env.MONGODB_LINK, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000, // ⏱️ 10 seconds timeout
 })
+.then(() => {
+  console.log("✅ MongoDB connected");
+})
+.catch((err) => {
+  console.error("❌ MongoDB connection failed:", err);
+});
+
 
 
 app.get('/',verifyAuth,(req,res)=>{

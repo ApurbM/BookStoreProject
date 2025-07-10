@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Banner from '../Components/Banner';
 import BookC from '../Components/BookC';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { fetchCart } from '../Redux/cartSlice';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
@@ -9,7 +10,7 @@ function Home() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -25,7 +26,7 @@ function Home() {
     };
 
     checkAuth();
-
+    dispatch(fetchCart(user?.CurrentUser?.rest?._id));    
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2500);
