@@ -16,7 +16,7 @@ app.set("trust proxy",1);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173', // your React frontend URL
+    origin: 'https://vercel.com/apurbms-projects/book-store-project', // your React frontend URL
     credentials: true, // if you are using cookies or sessions
   }));
 
