@@ -12,6 +12,7 @@ const paymentRoutes = require('./routes/payment.route');
 
 require('dotenv').config();
 
+app.set("trust proxy",1);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({

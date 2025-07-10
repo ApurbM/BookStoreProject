@@ -4,8 +4,6 @@ const errorHandler = require('../utilis/error');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
-
 const register = async (req, res, next) => {
   const { username, email, address, password } = req.body;
   try {
@@ -69,8 +67,9 @@ const login = async (req, res, next) => {
 
     return res
       .cookie('token', token, {
-        path: ' /',
-        httpOnly: false,
+        secure:true,
+        sameSite:'none',
+        httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({
@@ -86,7 +85,8 @@ const login = async (req, res, next) => {
 const logout = (req, res, next) => {
   res.clearCookie('token', {
     secure: true,
-    sameSite: isProduction ? 'None' : 'Lax',
+    sameSite:'none',
+    httpOnly:true,
   }).json({
     success: true,
     message: 'Logged out successfully',
