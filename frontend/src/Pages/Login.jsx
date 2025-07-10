@@ -22,7 +22,7 @@ async function handleSubmit(e) {
     dispatch(signInStart());
   try{
     
-    const res = await axios.post("http://localhost:3000/api/user/login",{
+    const res = await axios.post("https://bookstoreproject-yg34.onrender.com/api/user/login",{
        email:Email,
        password:Password   
     },
@@ -34,14 +34,18 @@ async function handleSubmit(e) {
        setError(res?.data?.message || "Login failed");
        return;
    }
-   dispatch(signInSuccess(res.data));
-   toast.success('Login successfull');
+   console.log(res);
    if(res?.data?.rest?.role==='user'){
+    dispatch(signInSuccess(res.data));
+   toast.success('Login successfull');
     navigate('/');
    }
    else if(res?.data?.rest?.role=='admin'){
+    dispatch(signInSuccess(res.data));
+   toast.success('Login successfull');
      navigate('/admin');
    }
+   return;
   }
   catch(err){
     console.log(err);
