@@ -1,26 +1,31 @@
 const jwt = require('jsonwebtoken');
 const errorHandler = require('./error');
 
-const verifyAuth = async (req,res,next)=>{
-     try{
-       const token = req.cookies.token;
-       if(!token){
-        return next(errorHandler(404,"Unauthourzed user"));
-       }
-       jwt.verify(token,process.env.JWT_KEY,(err,user)=>{
-             if(err){
-                return next(404,"Error in verification");
-             }  
-        if(user){
-            req.user = user;
-            next();
-          }
-       })
+const verifyAuth = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-    }     
-catch(err){
-   next(err);
-}
-}
+    // Check if Authorization header is present and starts with Bearer
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return next(errorHandler(401, "Unauthorized user: No token provided"));
+    }
+
+    // Extract token
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, process.env.JWT_KEY, (err, user) => {
+      if (err) {
+        return next(errorHandler(403, "Token verification failed"));
+      }
+
+      // Attach user payload to request
+      req.user = user;
+      next();
+    });
+
+  } catch (err) {
+    next(errorHandler(500, "Server error during token verification"));
+  }
+};
 
 module.exports = verifyAuth;

@@ -23,7 +23,7 @@ function Card({ val }) {
   console.log(val);
 async function AddToCart(e){
              e.stopPropagation(); 
-       dispatch(addToCart({book:val,userid:user.CurrentUser.rest._id}))
+       dispatch(addToCart({book:val,userid:user.CurrentUser._id}))
  }
 
 return (

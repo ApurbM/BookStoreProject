@@ -5,10 +5,13 @@ import axios from 'axios';
 
 export default function Order() {
   const dispatch = useDispatch();
-  const { items, loading,isF } = useSelector((state) => state.cart);
-  const userid = useSelector((state) => state.user.CurrentUser.rest._id);
+  const { items, loading, isF } = useSelector((state) => state.cart);
+  const userid = useSelector((state) => state.user.CurrentUser._id);
   const [paying, setPaying] = useState(false);
-  // console.log(loading);
+
+  // 🔑 Read token from localStorage
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     if (userid && items.length === 0) {
       dispatch(fetchCart(userid));
@@ -25,13 +28,17 @@ export default function Order() {
     setPaying(true);
     try {
       const { data: orderData } = await axios.post(
-        'http://localhost:3000/api/payment/create-order',
-        { amount: totalCost * 100 }, // in paisa
-        { withCredentials: true }
+        'https://bookstoreproject-yg34.onrender.com/api/payment/create-order',
+        { amount: totalCost * 100 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const options = {
-        key: 'rzp_test_zvpR59rH7tEjOl', // replace with your public key
+        key: 'rzp_test_zvpR59rH7tEjOl',
         amount: orderData.amount,
         currency: 'INR',
         name: 'Bookstore',
@@ -40,13 +47,17 @@ export default function Order() {
         handler: async function (response) {
           try {
             const { data: verifyData } = await axios.post(
-              'http://localhost:3000/api/payment/verify',
+              'https://bookstoreproject-yg34.onrender.com/api/payment/verify',
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
               },
-              { withCredentials: true }
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
 
             if (verifyData.success) {
@@ -78,8 +89,9 @@ export default function Order() {
       setPaying(false);
     }
   };
-console.log(isF);
- if(isF==false) return <>loading.....</>
+  if(user.CurrentUser==null) return <>loading...</>
+  if (isF === false) return <>loading.....</>;
+
   return (
     <div className="min-h-screen bg-[#f9f9f9] px-4 py-10">
       <h2 className="text-3xl font-bold text-center mb-10 text-[#222] tracking-wide">
@@ -100,7 +112,7 @@ console.log(isF);
               >
                 <div className="flex items-center gap-6">
                   <img
-                    src={`http://localhost:3000/uploads/${item.coverImage}`}
+                    src={`https://bookstoreproject-yg34.onrender.com/uploads/${item.coverImage}`}
                     alt={item.title}
                     className="w-20 h-28 object-cover rounded border"
                   />

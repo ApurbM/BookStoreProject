@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router'; // corrected import path
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router'; // ✅ fixed import
+import { useNavigate } from 'react-router'; // ✅ fixed import
 import { toast } from 'react-toastify';
-import axios from 'axios'
+import axios from 'axios';
+
 function SignIn() {
   const [User, setUser] = useState('');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
   const [Address, setAddress] = useState('');
   const [error, setError] = useState('');
- const navigate = useNavigate();
-async function handleSubmit(e) {
+  const navigate = useNavigate();
+
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!User) return setError('Please enter your username');
     if (!Email) return setError('Please enter your email');
@@ -19,26 +21,27 @@ async function handleSubmit(e) {
     setError('');
 
     try {
-      const res = await axios.post("https://bookstoreproject-yg34.onrender.com/api/user/register",{
-        username:User,
-        email:Email,
-        address:Address,
-        password:Password
-      },
-    {
-      withCredentials:true
-    }
-    )
-    if(res.data.success===false){
-      setError(res.data.message);
-      return;
-    }   
-     toast.success('User register successfully');
-     navigate('/login');
+      const res = await axios.post(
+        "https://bookstoreproject-yg34.onrender.com/api/user/register",
+        {
+          username: User,
+          email: Email,
+          address: Address,
+          password: Password
+        }
+        // ❌ no need for withCredentials here
+      );
 
-    } 
-    catch (err) {
-       console.log(err);
+      if (res.data.success === false) {
+        setError(res.data.message);
+        return;
+      }
+
+      toast.success('User registered successfully');
+      navigate('/login');
+    } catch (err) {
+      console.log(err);
+      setError("Something went wrong. Please try again.");
     }
   }
 
@@ -104,7 +107,7 @@ async function handleSubmit(e) {
 
           <p className="text-center text-sm text-gray-500 mt-4">
             Already have an account?{' '}
-            <Link to={'/login'}>
+            <Link to="/login">
               <span className="text-pink-600 hover:underline cursor-pointer">Log in</span>
             </Link>
           </p>

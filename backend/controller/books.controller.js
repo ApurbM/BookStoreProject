@@ -16,7 +16,6 @@ const getAllBook = async (req, res, next) => {
 const postBook = async (req, res, next) => {
     try {
         const user = req.user;
-
         // ✅ Must return here to prevent falling through
         if (user.role === 'user') {
             return res.status(403).json({

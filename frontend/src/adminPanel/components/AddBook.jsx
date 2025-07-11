@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+
 const AddBook = () => {
   const [book, setBook] = useState({
     title: "",
@@ -11,7 +12,8 @@ const AddBook = () => {
     trending: false,
     coverImage: null,
   });
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     if (type === "checkbox") {
@@ -22,9 +24,10 @@ const AddBook = () => {
       setBook({ ...book, [name]: value });
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (book.title.trim() === "") {
       setError("Please enter title");
       return;
@@ -41,9 +44,9 @@ const AddBook = () => {
       setError("Enter valid price details");
       return;
     }
-  
+
     setError("");
-  
+
     try {
       const formData = new FormData();
       formData.append("title", book.title);
@@ -52,34 +55,37 @@ const AddBook = () => {
       formData.append("oldPrice", Number(book.oldPrice));
       formData.append("newPrice", Number(book.newPrice));
       formData.append("trending", book.trending);
-  
+
       if (book.coverImage) {
         formData.append("coverImage", book.coverImage);
       }
-  
+
+      // 🔐 Get JWT token from localStorage
+      const token = localStorage.getItem("token");
+
       const res = await axios.post(
         "http://localhost:3000/api/book/post-book",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // ✅ Include token here
           },
-          withCredentials: true,
         }
       );
-  
+
       if (res?.data?.success === false) {
         toast.error(res?.data?.message || "Failed to add book");
         return;
       }
-  
+
       toast.success("Book added successfully");
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong. Please try again.");
     }
   };
-     
+
   return (
     <div>
       <h2 className="text-3xl font-bold mb-6">📚 Add a New Book</h2>
@@ -108,7 +114,6 @@ const AddBook = () => {
             onChange={handleChange}
             rows="4"
             className="w-full p-2 border rounded"
-            
           />
         </div>
 
@@ -174,7 +179,9 @@ const AddBook = () => {
           />
           <label className="font-medium">Mark as Trending</label>
         </div>
-         {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
         <button
           type="submit"
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded"

@@ -65,40 +65,34 @@ const login = async (req, res, next) => {
 
     const { password: _, ...rest } = findUser._doc;
 
-    return res
-      .cookie('token', token, {
-        httpOnly: true,
-        secure:true,
-        sameSite:'none',
-        // domain:'bookstoreproject-yg34.onrender.com',
-        maxAge: 24 * 60 * 60 * 1000,
-      })
-      .json({
-        success: true,
-        rest,
-        message: 'User logged in successfully',
-      });
+    return res.status(200).json({
+      success: true,
+      user: rest,
+      token, // ✅ Send token in response body instead of setting cookie
+      message: 'User logged in successfully',
+    });
   } catch (err) {
     return next(err);
   }
 };
 
+// ✅ No need to clear cookies anymore
 const logout = (req, res, next) => {
-  res.clearCookie('token', {
-    secure: true,
-    sameSite:'none',
-    httpOnly:true,
-  }).json({
+  return res.status(200).json({
     success: true,
-    message: 'Logged out successfully',
+    message: 'Client should remove token from localStorage',
   });
 };
 
+// ✅ Modified authV for token from Authorization header
 const authV = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(200).json({ authenticated: false });
   }
+
+  const token = authHeader.split(" ")[1];
 
   jwt.verify(token, process.env.JWT_KEY, (err, user) => {
     if (err) return res.status(403).json({ authenticated: false });
