@@ -33,7 +33,8 @@ const postBook = async (req, res, next) => {
             newPrice,
         } = req.body;
 
-        const coverImage = req.file ? req.file.filename : null;
+        const coverImage = req.file ? req.file.path : null; // This is the Cloudinary-hosted image URL
+
 
         // ✅ Check for required fields
         if (
