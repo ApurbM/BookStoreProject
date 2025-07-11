@@ -89,7 +89,7 @@ export default function Order() {
       setPaying(false);
     }
   };
-  if(user.CurrentUser==null) return <>loading...</>
+  if(userid==null) return <>loading...</>
   if (isF === false) return <>loading.....</>;
 
   return (

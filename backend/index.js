@@ -17,7 +17,7 @@ app.use(cors({
   origin: 'http://localhost:5173', // your React frontend URL
 }));
 
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use('/api/user', userRoutes);

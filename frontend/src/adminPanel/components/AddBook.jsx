@@ -64,7 +64,7 @@ const AddBook = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "http://localhost:3000/api/book/post-book",
+        "https://bookstoreproject-yg34.onrender.com/api/book/post-book",
         formData,
         {
           headers: {
