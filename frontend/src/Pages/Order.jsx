@@ -47,7 +47,7 @@ export default function Order() {
         order_id: orderData.id,
         notes:{
            userid:userid,
-           bookid:items.map((item)=>item?._id),
+           bookid:items.map((item)=>item?._id).join(','),
         },
         handler: async function (response) {
           try {
