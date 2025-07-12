@@ -116,7 +116,8 @@ router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
 
 router.post('/place-order', async (req, res, next) => {
   try {
-    const userid = req.user?._id;
+   
+    const userid = req.user?.id;
 
     const user = await User.findById(userid).select('cart');
 
@@ -124,10 +125,10 @@ router.post('/place-order', async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Cart is already empty or user not found' });
     }
 
-    const cartItems = user.cart;
+    const orderValue = user.cart;
 
     await User.findByIdAndUpdate(userid, {
-      $push: { purchase: { $each: cartItems } },  // move to purchase
+      $push: { purchase: { $each: orderValue } },  // move to purchase
       $set: { cart: [] }                          // empty cart
     });
 
