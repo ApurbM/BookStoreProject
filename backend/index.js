@@ -75,7 +75,7 @@ app.post('/webhook', express.json(), async (req, res) => {
     try {
       const newPurchase = new purchase({
         user: payment.notes.userid,
-        book: payment.notes.bookid, // Should be array of valid MongoDB ObjectIds
+        // book: payment.notes.bookid, // Should be array of valid MongoDB ObjectIds
         price: payment.amount / 100,
         razorpay_order_id: payment.order_id,
         razorpay_payment_id: payment.id,
