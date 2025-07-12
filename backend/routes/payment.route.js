@@ -117,24 +117,26 @@ router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
 router.post('/place-order', async (req, res, next) => {
   try {
     const userid = req.user?._id;
-    const { order } = req.body;
 
-    if (!Array.isArray(order)) {
-      return res.status(400).json({ success: false, message: 'Invalid order format' });
+    const user = await User.findById(userid).select('cart');
+
+    if (!user || !Array.isArray(user.cart) || user.cart.length === 0) {
+      return res.status(400).json({ success: false, message: 'Cart is already empty or user not found' });
     }
 
-    const bookIds = order.map(book => book._id).filter(Boolean);
+    const cartItems = user.cart;
 
     await User.findByIdAndUpdate(userid, {
-      $push: { purchase: { $each: bookIds } },  // ✅ pushes each book ID
-      $pull: { cart: { $in: bookIds } }         // ✅ pulls each book ID from cart
+      $push: { purchase: { $each: cartItems } },  // move to purchase
+      $set: { cart: [] }                          // empty cart
     });
 
     return res.status(202).json({
       success: true,
-      message: 'Order handled successfully (push/pull with $each)',
-      check: bookIds,
+      message: '🛒 Cart items moved to purchases successfully!',
+      movedItems: cartItems
     });
+
   } catch (err) {
     next(err);
   }
