@@ -81,7 +81,6 @@ app.post('/webhook', express.json(), async (req, res) => {
         razorpay_payment_id: payment.id,
         paymentMethod: payment.method,
         status: payment.status,
-        receipt: payment.receipt,
         billingEmail: payment.email,
         billingPhone: payment.contact,
         paidAt: new Date(payment.created_at * 1000)
