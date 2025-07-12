@@ -71,16 +71,18 @@ router.post('/verify', async (req, res) => {
 
 router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
      const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
-     
-     const signature = req.header['x-razorpay-signature'];
+     console.log("hi");
+     const signature = req.headers['x-razorpay-signature'];
      const generateSignature = crypto.createHmac('sha256',webhookSecret).update(req.body).digest('hex');
 
      if(signature===generateSignature){
         const data = JSON.parse(req.body);     
        if(data.event === 'payment.captured'){
-            
+         console.log('Webhook received at:', new Date());
+         console.log('Payload:', req.body);
+        
         const payment = data.payload.payment.entity;
-
+         console.log(payment);
          try{
             const newPurchase = new purchase({
                 user:payment.notes.userid , 
@@ -127,7 +129,8 @@ router.post('/place-order',async (req,res,next)=>{
     }    
      return res.status(202).json({
         success:true,
-        message:'Order handled successfully'
+        message:'Order handled successfully',
+        check:order,
      })
 
    }
