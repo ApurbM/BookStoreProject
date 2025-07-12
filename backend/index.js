@@ -15,7 +15,8 @@ require('dotenv').config();
 app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cors({
-  origin: 'https://book-store-project-lake.vercel.app', // your React frontend URL
+  // origin: 'https://book-store-project-lake.vercel.app', // your React frontend URL
+  origin:'http://localhost:5173',
 }));
 
 // app.use("/uploads", express.static("uploads"));
