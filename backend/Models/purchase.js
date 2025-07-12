@@ -7,11 +7,14 @@ const purchaseSchema = new mongoose.Schema({
     required: true
   },
 
-  book: {
+  book:
+[ 
+  {
     type: mongoose.Types.ObjectId,
     ref: 'books',
     required: true
-  },
+  }
+],
 
   price: {
     type: Number,
@@ -27,7 +30,7 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  
+
   paymentMethod: {
     type: String,
     enum: ['card', 'upi', 'netbanking', 'wallet', 'emi', 'bank_transfer', 'cash'],

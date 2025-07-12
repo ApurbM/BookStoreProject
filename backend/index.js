@@ -25,7 +25,6 @@ app.use('/api/book', bookRoutes);
 app.use('/api/fav', verifyAuth, favRoutes);       // ⬅️ Protected
 app.use('/api/cart', verifyAuth, cartRoutes);     // ⬅️ Protected
 app.use('/api/payment', verifyAuth, paymentRoutes); // ⬅️ Protected
-
 // Database
 mongoose.connect(process.env.MONGODB_LINK, {
   useNewUrlParser: true,

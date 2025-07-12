@@ -3,7 +3,10 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const router = express.Router();
 const Sign = require('../Models/signature'); 
-const  purchase  = require('../Models/purchase');                                            
+const  purchase  = require('../Models/purchase');          
+const User = require('../Models/user');
+const Order = require('../Models/purchase');
+
 // verifyAuth is already applied globally via app.use()
 
 const instance = new Razorpay({
@@ -101,16 +104,37 @@ router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
          }
         }
         else{
-          
         res.status(200).json({success:false,message:data.event});
-
         }
-
-
      }
      else {
     res.status(400).send('❌ Invalid signature');
       }
 })
+
+router.post('/place-order',async (req,res,next)=>{
+   try{
+    const userid = req.user?._id;
+    const {order} = req.body;
+    for(const orderData of order){
+       
+     await User.findByIdAndUpdate(userid,{
+        $push:{pastOrder:orderData._id}
+     })    
+     await User.findByIdAndUpdate(userid,{
+           $pull:{cart:orderData._id}
+     })
+    }    
+     return res.status(202).json({
+        success:true,
+        message:'Order handled successfully'
+     })
+
+   }
+   catch(err){
+next(err);
+   }
+});
+
 
 module.exports = router;

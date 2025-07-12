@@ -40,9 +40,9 @@ const User = mongoose.Schema({
              ref:'books'
            }
       ] ,
-      purchase: [{
+      pastOrder: [{
           type: mongoose.Types.ObjectId,
-          ref:'purchase'
+          ref:'books'
         }],
 },
   {timestamps: true} 

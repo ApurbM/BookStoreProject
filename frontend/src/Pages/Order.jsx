@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, removeFromCart } from '../Redux/cartSlice';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function Order() {
   const dispatch = useDispatch();
@@ -44,6 +45,10 @@ export default function Order() {
         name: 'Bookstore',
         description: 'Payment for books',
         order_id: orderData.id,
+        notes:{
+           userid:userid,
+           bookid:items.map((item)=>item?._id),
+        },
         handler: async function (response) {
           try {
             const { data: verifyData } = await axios.post(
@@ -62,7 +67,20 @@ export default function Order() {
 
             if (verifyData.success) {
               alert('✅ Payment successful!');
-              // Optional: Clear cart, redirect to success page, etc.
+              
+           const res = await axios.post('https://bookstoreproject-yg34.onrender.com/place-order',{
+                order:items.map((item)=>item)
+              },{
+                headers:{
+                  Authorization: `Bearer ${token}`,
+                }
+              })
+              if(res.data.success===true){
+                toast.success('Order placed');
+                return;
+              }
+              dispatch(fetchCart(userid));
+
             } else {
               alert('❌ Payment verification failed');
             }
