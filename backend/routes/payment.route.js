@@ -69,50 +69,6 @@ router.post('/verify', async (req, res) => {
   }
 });
 
-router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
-     const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
-     console.log("hi");
-     const signature = req.headers['x-razorpay-signature'];
-     const generateSignature = crypto.createHmac('sha256',webhookSecret).update(req.body).digest('hex');
-
-     if(signature===generateSignature){
-        const data = JSON.parse(req.body);     
-       if(data.event === 'payment.captured'){
-         console.log('Webhook received at:', new Date());
-         console.log('Payload:', req.body);
-        
-        const payment = data.payload.payment.entity;
-         console.log(payment);
-         try{
-            const newPurchase = new purchase({
-                user:payment.notes.userid , 
-                 book : payment.notes.bookid,
-                 price: payment.amount/100,
-                 razorpay_order_id: payment.order_id,
-                 razorpay_payment_id:payment.id,
-                 paymentMethod: payment.method,
-                 status: payment.status,
-                 receipt:payment.receipt,
-                billingEmail:payment.email,
-               billingPhone:payment.contact,
-               paidAt: new Date(payment.created_at*1000)
-            });
-          await newPurchase.save();
-          res.status(200).json({success:true,message:'payment recipt saved'});
-         }
-         catch(err){
-           console.error('❌ DB Save Failed:', err);
-        res.status(500).json({ status: 'db-error' });
-         }
-        }
-        else{
-        res.status(200).json({success:false,message:data.event});
-        }
-     }
-     else {
-    res.status(400).send('❌ Invalid signature');
-      }
-})
 
 router.post('/place-order', async (req, res, next) => {
   try {
@@ -137,7 +93,6 @@ router.post('/place-order', async (req, res, next) => {
       message: '🛒 Cart items moved to purchases successfully!',
       movedItems: orderValue
     });
-
   } catch (err) {
     next(err);
   }

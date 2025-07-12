@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 export default function Order() {
   const dispatch = useDispatch();
-  const { items, loading, isF } = useSelector((state) => state.cart);
+  const { items, loading, isF } = useSelector((state) => state?.cart);
   const userid = useSelector((state) => state?.user?.CurrentUser?._id);
   const [paying, setPaying] = useState(false);
 
