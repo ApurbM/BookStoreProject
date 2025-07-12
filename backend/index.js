@@ -44,7 +44,7 @@ app.get('/', verifyAuth, (req, res) => {
   });
 });
 
-app.post('/api/payment/webhook',express.raw({type:'application/json'}),async (req,res)=>{
+app.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
      const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
      console.log("hi");
      const signature = req.headers['x-razorpay-signature'];
