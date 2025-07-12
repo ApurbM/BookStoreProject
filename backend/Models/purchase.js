@@ -4,7 +4,6 @@ const purchaseSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
     ref: 'user',
-    required: true
   },
 
   book:
@@ -12,18 +11,15 @@ const purchaseSchema = new mongoose.Schema({
   {
     type: mongoose.Types.ObjectId,
     ref: 'books',
-    required: true
   }
 ],
 
   price: {
     type: Number,
-    required: true
   },
 
   razorpay_order_id: {
     type: String,
-    required: true
   },
 
   razorpay_payment_id: {
