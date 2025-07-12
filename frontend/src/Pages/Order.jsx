@@ -77,9 +77,8 @@ export default function Order() {
               })
               if(res.data.success===true){
                 toast.success('Order placed');
-                return;
+                dispatch(fetchCart(userid));
               }
-              dispatch(fetchCart(userid));
 
             } else {
               alert('❌ Payment verification failed');
@@ -123,7 +122,7 @@ export default function Order() {
       ) : (
         <div className="max-w-5xl mx-auto bg-white p-6 rounded-md shadow-md">
           <ul className="divide-y divide-gray-200">
-            {items.map((item) => (
+            {items?.map((item) => (
               <li
                 key={item._id}
                 className="flex items-center justify-between py-6 hover:bg-gray-50 transition-all"
