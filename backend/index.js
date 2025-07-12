@@ -58,13 +58,24 @@ app.post('/webhook', express.json(), async (req, res) => {
   console.log("✅ Webhook received at:", new Date());
   console.log("📦 Payload:", JSON.stringify(data, null, 2));
 
+  // Signature verification is NOT needed when testing from Postman or Razorpay dashboard
+  const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
+  const signature = req.headers['x-razorpay-signature'];
+  const generatedSignature = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(JSON.stringify(req.body))
+    .digest('hex');
+  if (signature !== generatedSignature) {
+    return res.status(400).send('❌ Invalid signature');
+  }
+
   if (data.event === 'payment.captured') {
     const payment = data.payload.payment.entity;
 
     try {
       const newPurchase = new purchase({
         user: payment.notes.userid,
-        book: payment.notes.bookid, // Must be valid ObjectId strings!
+        book: payment.notes.bookid, // Should be array of valid MongoDB ObjectIds
         price: payment.amount / 100,
         razorpay_order_id: payment.order_id,
         razorpay_payment_id: payment.id,
@@ -76,19 +87,15 @@ app.post('/webhook', express.json(), async (req, res) => {
         paidAt: new Date(payment.created_at * 1000)
       });
 
-      await newPurchase.save(); // This line is failing most likely
+      await newPurchase.save();
 
       return res.status(200).json({
         success: true,
         message: '✅ Test webhook handled and purchase saved.'
       });
     } catch (err) {
-      console.error('❌ DB Save Failed:', err.message);
-      return res.status(500).json({
-        success: false,
-        message: '❌ Database error',
-        error: err.message
-      });
+      console.error('❌ DB Save Failed:', err);
+      return res.status(500).json({ success: false, message: '❌ Database error' });
     }
   }
 
