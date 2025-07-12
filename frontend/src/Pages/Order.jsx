@@ -68,7 +68,7 @@ export default function Order() {
             if (verifyData.success) {
               alert('✅ Payment successful!');
               
-           const res = await axios.post('https://bookstoreproject-yg34.onrender.com/place-order',{
+           const res = await axios.post('https://bookstoreproject-yg34.onrender.com/api/payment/place-order',{
                 order:items.map((item)=>item)
               },{
                 headers:{
