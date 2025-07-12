@@ -119,7 +119,7 @@ router.post('/place-order',async (req,res,next)=>{
     for(const orderData of order){
        
      await User.findByIdAndUpdate(userid,{
-        $push:{pastOrder:orderData._id}
+        $push:{purchase:orderData._id}
      })    
      await User.findByIdAndUpdate(userid,{
            $pull:{cart:orderData._id}

@@ -40,7 +40,7 @@ const User = mongoose.Schema({
              ref:'books'
            }
       ] ,
-      pastOrder: [{
+      purchase: [{
           type: mongoose.Types.ObjectId,
           ref:'books'
         }],

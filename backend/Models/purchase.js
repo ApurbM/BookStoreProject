@@ -30,20 +30,17 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   paymentMethod: {
     type: String,
     enum: ['card', 'upi', 'netbanking', 'wallet', 'emi', 'bank_transfer', 'cash'],
     required: true
   },
-
   status: {
     type: String,
     enum: ['created', 'attempted', 'paid', 'failed', 'refunded'],
     default: 'paid'
     // ✅ These are Razorpay official states
   },
-
   receipt: {
     type: String
     // ✅ Use this for matching with Razorpay's `receipt` field
