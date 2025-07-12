@@ -6,10 +6,10 @@ import axios from 'axios';
 export default function Order() {
   const dispatch = useDispatch();
   const { items, loading, isF } = useSelector((state) => state.cart);
-  const userid = useSelector((state) => state.user.CurrentUser._id);
+  const userid = useSelector((state) => state?.user?.CurrentUser?._id);
   const [paying, setPaying] = useState(false);
 
-  // 🔑 Read token from localStorage
+
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Order() {
         }
       );
 
-      const options = {
+     const options = {
         key: 'rzp_test_zvpR59rH7tEjOl',
         amount: orderData.amount,
         currency: 'INR',
@@ -112,7 +112,7 @@ export default function Order() {
               >
                 <div className="flex items-center gap-6">
                   <img
-                    src={`https://bookstoreproject-yg34.onrender.com/uploads/${item.coverImage}`}
+                    src={item.coverImage}
                     alt={item.title}
                     className="w-20 h-28 object-cover rounded border"
                   />

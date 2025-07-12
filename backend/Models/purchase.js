@@ -23,11 +23,11 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // paymentMethod: {
-  //   type: String,
-  //   enum: ['card', 'upi', 'netbanking', 'wallet', 'cash'],
-  //   required: true
-  // },
+  paymentMethod: {
+    type: String,
+    enum: ['card', 'upi', 'netbanking', 'wallet', 'cash'],
+    required: true
+  },
   status: {
     type: String,
     enum: ['paid', 'pending', 'failed'],
@@ -47,9 +47,6 @@ const purchaseSchema = new mongoose.Schema({
     enum: ['not_required', 'shipped', 'delivered'],
     default: 'not_required'
   },
-  notes: {
-    type: String
-  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('purchase', purchaseSchema);

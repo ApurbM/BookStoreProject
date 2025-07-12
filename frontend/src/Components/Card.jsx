@@ -34,7 +34,7 @@ return (
       {/* Book Image */}
       <div className="w-24 sm:w-32 h-36 sm:h-44 flex-shrink-0 overflow-hidden rounded-md border hover:scale-105 transition-transform duration-300 ease-in-out">
         <img
-          src={`http://localhost:3000/uploads/${val.coverImage}`}
+           src={val.coverImage} 
           alt={val.title}
           className="w-full h-full object-cover rounded-md"
         />

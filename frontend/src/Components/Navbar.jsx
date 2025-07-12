@@ -38,7 +38,7 @@ function Navbar() {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        "http://localhost:3000/api/user/logout",
+        "https://bookstoreproject-yg34.onrender.com/api/user/logout",
         {},
         {
           headers: {
@@ -89,7 +89,7 @@ function Navbar() {
 
           <button onClick={() => navigate('/signIn')} className={`bg-blue-300 ${user.CurrentUser !== null && 'hidden'} px-4 py-1 text-white rounded-full hover:bg-blue-400 transition`}>Sign In</button>
 
-          {user.CurrentUser !== null && <button onClick={handleLogout} className="bg-pink-400 px-4 py-1 text-white rounded-full hover:bg-pink-500 transition">Logout</button>}
+          {user?.CurrentUser !== null && <button onClick={handleLogout} className="bg-pink-400 px-4 py-1 text-white rounded-full hover:bg-pink-500 transition">Logout</button>}
 
           {user.CurrentUser !== null && <Link to="/order" className="flex items-center bg-yellow-400 px-4 py-1 rounded-full hover:bg-yellow-500 transition">
             <ShoppingCart size={20} color="black" />
