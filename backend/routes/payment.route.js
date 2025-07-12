@@ -114,29 +114,30 @@ router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
       }
 })
 
-router.post('/place-order',async (req,res,next)=>{
-   try{
+router.post('/place-order', async (req, res, next) => {
+  try {
     const userid = req.user?._id;
-    const {order} = req.body;
-    for(const orderData of order){
-       
-     await User.findByIdAndUpdate(userid,{
-        $push:{purchase:orderData._id}
-     })    
-     await User.findByIdAndUpdate(userid,{
-           $pull:{cart:orderData._id}
-     })
-    }    
-     return res.status(202).json({
-        success:true,
-        message:'Order handled successfully',
-        check:order,
-     })
+    const { order } = req.body;
 
-   }
-   catch(err){
-next(err);
-   }
+    if (!Array.isArray(order)) {
+      return res.status(400).json({ success: false, message: 'Invalid order format' });
+    }
+
+    const bookIds = order.map(book => book._id).filter(Boolean);
+
+    await User.findByIdAndUpdate(userid, {
+      $push: { purchase: { $each: bookIds } },  // ✅ pushes each book ID
+      $pull: { cart: { $in: bookIds } }         // ✅ pulls each book ID from cart
+    });
+
+    return res.status(202).json({
+      success: true,
+      message: 'Order handled successfully (push/pull with $each)',
+      check: bookIds,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 
