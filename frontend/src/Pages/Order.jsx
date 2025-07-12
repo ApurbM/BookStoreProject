@@ -77,6 +77,7 @@ export default function Order() {
               })
               if(res.data.success===true){
                 toast.success('Order placed');
+                console.log(res.data);
                 dispatch(fetchCart(userid));
               }
 
