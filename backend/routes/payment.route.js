@@ -27,7 +27,7 @@ router.post('/create-order', async (req, res) => {
     }
 });
 
-router.post('/verify',verifyAuth ,async (req, res) => {
+router.post('/verify',async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
@@ -41,7 +41,7 @@ router.post('/verify',verifyAuth ,async (req, res) => {
             const order = new sign({
                   Razorpay_order_id:razorpay_order_id,
                   Razorpay_payment_id:razorpay_payment_id,
-                  razorpay_signature:razorpay_signature,
+                  Razorpay_signature:razorpay_signature,
                   userid:req.user?.id,             
             })    
            await order.save();
