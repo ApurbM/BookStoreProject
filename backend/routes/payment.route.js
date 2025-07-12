@@ -135,7 +135,7 @@ router.post('/place-order', async (req, res, next) => {
     return res.status(202).json({
       success: true,
       message: '🛒 Cart items moved to purchases successfully!',
-      movedItems: cartItems
+      movedItems: orderValue
     });
 
   } catch (err) {
