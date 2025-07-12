@@ -3,7 +3,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const router = express.Router();
 const Sign = require('../Models/signature'); 
-                                              
+const  purchase  = require('../Models/purchase');                                            
 // verifyAuth is already applied globally via app.use()
 
 const instance = new Razorpay({
@@ -65,5 +65,52 @@ router.post('/verify', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Invalid signature' });
   }
 });
+
+router.post('/webhook',express.raw({type:'application/json'}),async (req,res)=>{
+     const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
+     
+     const signature = req.header['x-razorpay-signature'];
+     const generateSignature = crypto.createHmac('sha256',webhookSecret).update(req.body).digest('hex');
+
+     if(signature===generateSignature){
+        const data = JSON.parse(req.body);     
+       if(data.event === 'payment.captured'){
+            
+        const payment = data.payload.payment.entity;
+
+         try{
+            const newPurchase = new purchase({
+                user:payment.notes.userid , 
+                 book : payment.notes.bookid,
+                 price: payment.amount/100,
+                 razorpay_order_id: payment.order_id,
+                 razorpay_payment_id:payment.id,
+                 paymentMethod: payment.method,
+                 status: payment.status,
+                 receipt:payment.receipt,
+                billingEmail:payment.email,
+               billingPhone:payment.contact,
+               paidAt: new Date(payment.created_at*1000)
+            });
+          await newPurchase.save();
+          res.status(200).json({success:true,message:'payment recipt saved'});
+         }
+         catch(err){
+           console.error('❌ DB Save Failed:', err);
+        res.status(500).json({ status: 'db-error' });
+         }
+        }
+        else{
+          
+        res.status(200).json({success:false,message:data.event});
+
+        }
+
+
+     }
+     else {
+    res.status(400).send('❌ Invalid signature');
+      }
+})
 
 module.exports = router;

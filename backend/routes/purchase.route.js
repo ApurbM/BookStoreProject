@@ -15,7 +15,7 @@ router.post('/place-order',async (req,res,next)=>{
         })
     const orderDataFromDB = await neworder.save();
      await User.findByIdAndUpdate(userid,{
-        $push:{purchase:orderDataFromDB._id}
+        $push:{purchase:orderData._id}
      })    
      await User.findByIdAndUpdate(userid,{
            $pull:{cart:orderData._id}
