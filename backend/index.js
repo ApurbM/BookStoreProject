@@ -59,13 +59,14 @@ app.post('/webhook', express.json(), async (req, res) => {
   console.log("📦 Payload:", JSON.stringify(data, null, 2));
 
   // Signature verification is NOT needed when testing from Postman or Razorpay dashboard
-  const webhookSecret = process.env.RAZORPAY_KEY_SECRET;
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
   const signature = req.headers['x-razorpay-signature'];
   const generatedSignature = crypto
     .createHmac('sha256', webhookSecret)
     .update(JSON.stringify(req.body))
     .digest('hex');
   if (signature !== generatedSignature) {
+    console.log('invalid signature');
     return res.status(400).send('❌ Invalid signature');
   }
 
@@ -75,7 +76,7 @@ app.post('/webhook', express.json(), async (req, res) => {
     try {
       const newPurchase = new purchase({
         user: payment.notes.userid,
-        // book: payment.notes.bookid, // Should be array of valid MongoDB ObjectIds
+        book: payment.notes.bookid, // Should be array of valid MongoDB ObjectIds
         price: payment.amount / 100,
         razorpay_order_id: payment.order_id,
         razorpay_payment_id: payment.id,
