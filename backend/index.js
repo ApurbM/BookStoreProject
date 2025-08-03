@@ -26,8 +26,7 @@ app.use((req, res, next) => {
   }
 });
 app.use(cors({
-  origin: 'https://book-store-project-lake.vercel.app', // Or localhost during development
-  // origin:'http://localhost:5173'
+  origin: 'https://book-store-project-lake.vercel.app',
 }));
 
 // MongoDB Connection
