@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
-
+  const [loading,setLoading] = useState(false);
   const fetchOrders = async () => {
     try {
       const res = await axios.get("https://bookstoreproject-yg34.onrender.com/api/order/getAllOrder", {
@@ -31,6 +31,7 @@ const Order = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
+      setLoading(true);
       const res = await axios.put(
         "https://bookstoreproject-yg34.onrender.com/api/order/editStatus",
         {
@@ -46,7 +47,8 @@ const Order = () => {
 
       if (res.data.success) {
         toast.success("Status updated successfully");
-           fetchOrders();   
+           fetchOrders();
+           setLoading(false);   
       } else {
         toast.error(res.data.message);
       }
@@ -56,7 +58,7 @@ const Order = () => {
     }
   };
 
-  const statusOptions = ["processing", "shipped", "delivered", "cancelled"];
+  const statusOptions = ["Processing", "Shipped", "Delivered", "Cancelled"];
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -108,15 +110,21 @@ const Order = () => {
               <div className="mt-2">
                 <label className="block text-sm font-medium mb-1">Update Status:</label>
                 <select
+                  disabled={loading}
                   value={order.deliveryStatus}
                   onChange={(e) => handleStatusChange(order._id, e.target.value)}
                   className="p-2 border rounded"
                 >
-                  {statusOptions.map((status) => (
+
+                  {loading ?(      
+                   <option>
+                    Updating....
+                   </option>
+                  ):(statusOptions.map((status) => (
                     <option key={status} value={status}>
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                      {status}
                     </option>
-                  ))}
+                  )))}
                 </select>
               </div>
             </div>
