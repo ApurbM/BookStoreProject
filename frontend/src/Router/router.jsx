@@ -13,7 +13,7 @@ import AddBook from "../adminPanel/components/AddBook";
 import EditBooks from "../adminPanel/components/EditBooks";
 import { Navigate } from "react-router";
 import Profile from "../Pages/Profile";
-import EditBookInfo from "../adminPanel/components/editBookInfo";
+import EditBookInfo from "../adminPanel/components/EditBookInfo";
 const router = createBrowserRouter(
 [
     {
