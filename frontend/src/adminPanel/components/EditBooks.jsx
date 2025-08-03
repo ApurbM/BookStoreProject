@@ -10,7 +10,7 @@ const EditBooks = () => {
 
   const fetchBook = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/book/get-all-books");
+      const res = await axios.get("https://bookstoreproject-yg34.onrender.com/api/book/get-all-books");
       if (res.data.success === false) {
         toast.error(res.data.message);
         return;
@@ -28,7 +28,7 @@ const EditBooks = () => {
 
   const deleteBook = async (bookid) => {
     try {
-      const res = await axios.delete("http://localhost:3000/api/book/remove-book", {
+      const res = await axios.delete("https://bookstoreproject-yg34.onrender.com/api/book/remove-book", {
         headers: {
           Authorization: `Bearer ${token}`,
           bookid: bookid,

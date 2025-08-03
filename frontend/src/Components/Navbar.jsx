@@ -38,8 +38,8 @@ function Navbar() {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        // "https://bookstoreproject-yg34.onrender.com/api/user/logout",
-        'http://localhost:3000/api/user/logout',
+        "https://bookstoreproject-yg34.onrender.com/api/user/logout",
+        // 'http://localhost:3000/api/user/logout',
         {},
         {
           headers: {

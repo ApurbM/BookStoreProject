@@ -44,7 +44,7 @@ function QuestionBox({ question, answer, askedBy }) {
       }
 
       try {
-        const res = await axios.get('http://localhost:3000/api/user/auth-check', {
+        const res = await axios.get('https://bookstoreproject-yg34.onrender.com/api/user/auth-check', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

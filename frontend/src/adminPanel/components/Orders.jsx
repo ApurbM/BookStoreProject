@@ -8,7 +8,7 @@ const Order = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/order/getAllOrder", {
+      const res = await axios.get("https://bookstoreproject-yg34.onrender.com/api/order/getAllOrder", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,7 +32,7 @@ const Order = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/order/editStatus",
+        "https://bookstoreproject-yg34.onrender.com/api/order/editStatus",
         {
           newStatus: newStatus,
         },

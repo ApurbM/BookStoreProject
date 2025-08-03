@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// const baseURL = 'https://bookstoreproject-yg34.onrender.com/api/cart';
-const baseURL = 'http://localhost:3000/api/cart';
+const baseURL = 'https://bookstoreproject-yg34.onrender.com/api/cart';
+// const baseURL = 'http://localhost:3000/api/cart';
 
 // 🔐 Token header helper
 const getTokenHeader = () => {

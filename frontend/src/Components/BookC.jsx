@@ -26,7 +26,7 @@ const BookC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/book/get-all-books');
+        const res = await axios.get('https://bookstoreproject-yg34.onrender.com/api/book/get-all-books');
         setBook(res.data);
         setFilterBook(res.data.bookArray);
         console.log(res.data.bookArray);

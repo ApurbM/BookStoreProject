@@ -22,8 +22,8 @@ function SignIn() {
 
     try {
       const res = await axios.post(
-        // "https://bookstoreproject-yg34.onrender.com/api/user/register",
-        "http://localhost:3000/api/user/register",
+        "https://bookstoreproject-yg34.onrender.com/api/user/register",
+        // "http://localhost:3000/api/user/register",
         {
           username: User,
           email: Email,

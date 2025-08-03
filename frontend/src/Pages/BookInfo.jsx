@@ -18,7 +18,7 @@ function BookInfo() {
 
   const fetchComment = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/comment/getComment', {
+      const res = await axios.get('https://bookstoreproject-yg34.onrender.com/api/comment/getComment', {
         headers: {
           Authorization: `Bearer ${token}`,
           bookid: state.BookId,
@@ -42,7 +42,7 @@ function BookInfo() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        'http://localhost:3000/api/comment/addComment',
+        'https://bookstoreproject-yg34.onrender.com/api/comment/addComment',
         {
           comment: reviewText,
           stars: rating,
@@ -72,7 +72,7 @@ function BookInfo() {
   const handleDeleteComment = async (commentId) => {
     try {
       const res = await axios.put(
-        'http://localhost:3000/api/comment/removeComment',
+        'https://bookstoreproject-yg34.onrender.com/api/comment/removeComment',
         {},
         {
           headers: {

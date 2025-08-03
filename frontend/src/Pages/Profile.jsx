@@ -10,7 +10,7 @@ const Profile = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/order/getOrderById", {
+      const res = await axios.get("https://bookstoreproject-yg34.onrender.com/api/order/getOrderById", {
         headers: {
           Authorization: `Bearer ${token}`,
           userid: user._id,

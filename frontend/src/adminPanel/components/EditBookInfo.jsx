@@ -36,7 +36,7 @@ const EditBookInfo = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        `http://localhost:3000/api/book/update-book`,
+        `https://bookstoreproject-yg34.onrender.com/api/book/update-book`,
         updatedBook,
         {
           headers: {
