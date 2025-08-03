@@ -11,8 +11,8 @@ import axios from 'axios';
 const menu = [
   { path: "/", name: "Home" },
   { path: "/about", name: "About" },
-  { path: "/", name: "Profile" },
-  { path: "/", name: "Logout" }
+  { path: "/profile", name: "Profile" },
+  { path: "/logout", name: "Logout" }
 ];
 
 function Navbar() {
@@ -38,7 +38,8 @@ function Navbar() {
       const token = localStorage.getItem("token");
 
       const res = await axios.put(
-        "https://bookstoreproject-yg34.onrender.com/api/user/logout",
+        // "https://bookstoreproject-yg34.onrender.com/api/user/logout",
+        'http://localhost:3000/api/user/logout',
         {},
         {
           headers: {

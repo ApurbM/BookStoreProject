@@ -14,10 +14,11 @@ export default function Order() {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (userid && items.length === 0) {
+    if (userid) {
+      console.log(items);
       dispatch(fetchCart(userid));
     }
-  }, [dispatch, userid]);
+  }, []);
 
   const handleRemove = (book) => {
     dispatch(removeFromCart({ book, userid }));
@@ -29,7 +30,8 @@ export default function Order() {
     setPaying(true);
     try {
       const { data: orderData } = await axios.post(
-        'https://bookstoreproject-yg34.onrender.com/api/payment/create-order',
+        // 'https://bookstoreproject-yg34.onrender.com/api/payment/create-order',
+        'http://localhost:3000/api/payment/create-order',
         { amount: totalCost * 100 },
         {
           headers: {
@@ -52,7 +54,8 @@ export default function Order() {
         handler: async function (response) {
           try {
             const { data: verifyData } = await axios.post(
-              'https://bookstoreproject-yg34.onrender.com/api/payment/verify',
+              // 'https://bookstoreproject-yg34.onrender.com/api/payment/verify',
+              'http://localhost:3000/api/payment/verify',
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -68,7 +71,10 @@ export default function Order() {
             if (verifyData.success) {
               alert('✅ Payment successful!');
               
-           const res = await axios.post('https://bookstoreproject-yg34.onrender.com/api/payment/place-order',{},{
+           const res = await axios.post(
+            // 'https://bookstoreproject-yg34.onrender.com/api/payment/place-order',
+            'http://localhost:3000/api/payment/place-order',
+            {},{
                 headers:{
                   Authorization: `Bearer ${token}`,
                 }

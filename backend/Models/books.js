@@ -11,8 +11,7 @@ const bookSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true,
-    enum: ['adventure', 'fiction', 'non-fiction', 'fantasy', 'science', 'books','horror','marketing'], // extend as needed
+    required: true,  
   },
   trending: {
     type: Boolean,
@@ -29,7 +28,30 @@ const bookSchema = new mongoose.Schema({
   newPrice: {
     type: Number,
     required: true,
-  }
+  },
+  commentSection: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+      stars: {
+        type: Number,
+        min: 1,
+        max: 5,
+        required: true,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      }
+    }
+  ]
 },
 {timestamps:true}
 );

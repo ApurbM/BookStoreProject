@@ -11,8 +11,9 @@ const favRoutes = require('./routes/Fav.route');
 const cartRoutes = require('./routes/cart.route');
 const paymentRoutes = require('./routes/payment.route');
 const purchase = require('./Models/purchase');
+const orderRoute = require('./routes/order.route');
+const commentRoutes = require('./routes/comment.route');
 const { Types } = require('mongoose');
-
 dotenv.config();
 
 // Middleware (except for /webhook)
@@ -25,7 +26,8 @@ app.use((req, res, next) => {
   }
 });
 app.use(cors({
-  origin: 'https://book-store-project-lake.vercel.app', // Or localhost during development
+  // origin: 'https://book-store-project-lake.vercel.app', // Or localhost during development
+  origin:'http://localhost:5173'
 }));
 
 // MongoDB Connection
@@ -43,6 +45,8 @@ app.use('/api/book', bookRoutes);
 app.use('/api/fav', verifyAuth, favRoutes);
 app.use('/api/cart', verifyAuth, cartRoutes);
 app.use('/api/payment', verifyAuth, paymentRoutes);
+app.use('/api/order',verifyAuth,orderRoute);
+app.use('/api/comment',commentRoutes);
 
 // Test route
 app.get('/', verifyAuth, (req, res) => {

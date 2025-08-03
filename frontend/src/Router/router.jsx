@@ -8,6 +8,12 @@ import Login from "../Pages/Login";
 import SingIn from "../Pages/SingIn";
 import BookInfo from "../Pages/BookInfo";
 import Admin from "../adminPanel/admin";
+import Orders from "../adminPanel/components/Orders";
+import AddBook from "../adminPanel/components/AddBook";
+import EditBooks from "../adminPanel/components/EditBooks";
+import { Navigate } from "react-router";
+import Profile from "../Pages/Profile";
+import EditBookInfo from "../adminPanel/components/EditBookInfo";
 const router = createBrowserRouter(
 [
     {
@@ -43,9 +49,23 @@ const router = createBrowserRouter(
                element:<BookInfo/>
            },
            {
-            path:'/admin',
-            element:<Admin/>
-           }
+          path: "/admin",
+          element: <Admin />,
+          children: [
+            {
+             index: true,
+             element: <Navigate to="add-book" replace />,
+            },
+          { path: "add-book", element: <AddBook /> },
+          { path: "edit-book", element: <EditBooks /> },
+          { path: "edit-book-info/:id", element: <EditBookInfo/> },
+          { path: "order", element: <Orders/> },
+          ]
+          },
+          {
+           path:'/profile',
+           element:<Profile/>
+          }
         ] 
     }
 ]

@@ -33,20 +33,16 @@ const purchaseSchema = new mongoose.Schema({
   },
   receipt: {
     type: String
-    // ✅ Use this for matching with Razorpay's `receipt` field
   },
-
   billingEmail: {
     type: String
   },
-
   billingPhone: {
     type: String
   },
-
   deliveryStatus: {
     type: String,
-    default: 'not_required'
+    default: 'Processing'
   },
 
   paidAt: {

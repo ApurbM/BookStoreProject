@@ -10,9 +10,11 @@ const upload = require('../utilis/Multer');
 // const upload = multer({ dest: 'uploads/' });
 
 
+
 router.post('/post-book',verifyAuth,upload.single('coverImage'),postBook);
 router.get('/get-all-books',getAllBook);
 router.put('/update-book',verifyAuth,updateBook);
 router.delete('/remove-book',verifyAuth,removeBook);
+
 
 module.exports = router;

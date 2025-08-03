@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddBook = () => {
   const [book, setBook] = useState({
@@ -12,6 +13,7 @@ const AddBook = () => {
     trending: false,
     coverImage: null,
   });
+
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -28,48 +30,33 @@ const AddBook = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (book.title.trim() === "") {
-      setError("Please enter title");
-      return;
-    }
-    if (book.description.trim() === "") {
-      setError("Please enter description");
-      return;
-    }
-    if (book.category === "") {
-      setError("Please select category");
-      return;
-    }
+    if (book.title.trim() === "") return setError("Please enter title");
+    if (book.description.trim() === "") return setError("Please enter description");
     if (!book.oldPrice || !book.newPrice || book.oldPrice <= 0 || book.newPrice <= 0) {
-      setError("Enter valid price details");
-      return;
+      return setError("Enter valid price details");
     }
 
     setError("");
 
     try {
       const formData = new FormData();
-      formData.append("title", book.title);
-      formData.append("description", book.description);
-      formData.append("category", book.category);
-      formData.append("oldPrice", Number(book.oldPrice));
-      formData.append("newPrice", Number(book.newPrice));
-      formData.append("trending", book.trending);
+      Object.entries(book).forEach(([key, value]) => {
+        if (key === "coverImage" && value) {
+          formData.append("coverImage", value);
+        } else {
+          formData.append(key, value);
+        }
+      });
 
-      if (book.coverImage) {
-        formData.append("coverImage", book.coverImage);
-      }
-
-      // 🔐 Get JWT token from localStorage
       const token = localStorage.getItem("token");
 
       const res = await axios.post(
-        "https://bookstoreproject-yg34.onrender.com/api/book/post-book",
+        "http://localhost:3000/api/book/post-book",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // ✅ Include token here
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -87,108 +74,98 @@ const AddBook = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-6">📚 Add a New Book</h2>
-      <form
-        className="bg-white p-8 rounded-lg shadow max-w-2xl space-y-5"
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <label className="block mb-1 font-medium">Title</label>
-          <input
-            type="text"
-            name="title"
-            placeholder="The Giving Tree"
-            value={book.title}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
+    <div className="min-h-screen bg-[#f8fbfc] flex items-center justify-center px-4 py-10">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-10">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          📚 Add a New Book
+        </h2>
 
-        <div>
-          <label className="block mb-1 font-medium">Description</label>
-          <textarea
-            name="description"
-            placeholder="Enter book description"
-            value={book.description}
-            onChange={handleChange}
-            rows="4"
-            className="w-full p-2 border rounded"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
+          {/* Left Column */}
+          <div className="space-y-4">
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              value={book.title}
+              onChange={handleChange}
+              className="w-full border border-gray-200 px-4 py-3 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            />
+            <textarea
+              name="description"
+              rows="4"
+              placeholder="Description"
+              value={book.description}
+              onChange={handleChange}
+              className="w-full border border-gray-200 px-4 py-3 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            ></textarea>
 
-        <div>
-          <label className="block mb-1 font-medium">Category</label>
-          <select
-            name="category"
-            value={book.category}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="fiction">Fiction</option>
-            <option value="education">Education</option>
-            <option value="biography">Biography</option>
-            <option value="romance">Romance</option>
-            <option value="mystery">Mystery</option>
-          </select>
-        </div>
+            <select
+              name="category"
+              value={book.category}
+              onChange={handleChange}
+              className="w-full border border-gray-200 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
+            >
+              <option value="fiction">Fiction</option>
+              <option value="education">Education</option>
+              <option value="biography">Biography</option>
+              <option value="romance">Romance</option>
+              <option value="mystery">Mystery</option>
+            </select>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 font-medium">Old Price</label>
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="trending"
+                checked={book.trending}
+                onChange={handleChange}
+                className="h-4 w-4 text-teal-500"
+              />
+              <label className="text-sm text-gray-700">Mark as Trending</label>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-4">
             <input
               type="number"
               name="oldPrice"
+              placeholder="Old Price"
               value={book.oldPrice}
               onChange={handleChange}
-              placeholder="34.99"
-              className="w-full p-2 border rounded"
+              className="w-full border border-gray-200 px-4 py-3 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">New Price</label>
             <input
               type="number"
               name="newPrice"
+              placeholder="New Price"
               value={book.newPrice}
               onChange={handleChange}
-              placeholder="24.99"
-              className="w-full p-2 border rounded"
+              className="w-full border border-gray-200 px-4 py-3 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
+            <input
+              type="file"
+              name="coverImage"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full border border-gray-200 bg-gray-50 px-4 py-3 rounded-md text-sm text-gray-700"
+            />
+            {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
           </div>
-        </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Upload Cover Image</label>
-          <input
-            type="file"
-            name="coverImage"
-            accept="image/*"
-            onChange={handleChange}
-            className="bg-gray-300 border-2"
-          />
-        </div>
+          {/* Submit Button Full Width */}
+          <div className="md:col-span-2 mt-4">
+            <button
+              type="submit"
+              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-md transition shadow-md"
+            >
+              Add Book
+            </button>
+          </div>
+        </form>
+      </div>
 
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            name="trending"
-            checked={book.trending}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label className="font-medium">Mark as Trending</label>
-        </div>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <button
-          type="submit"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded"
-        >
-          Add Book
-        </button>
-      </form>
+      <ToastContainer position="top-right" />
     </div>
   );
 };

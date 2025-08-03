@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import blog from '../assets/blog.json';
 import Card from './Card';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import '../index.css';
@@ -24,21 +23,20 @@ const BookC = () => {
   const [book, setBook] = useState([]);
   const [filterBook, setFilterBook] = useState([]);
 
- useEffect(() => {
-  const fetchBooks = async () => {
-    try {
-      const res = await axios.get('https://bookstoreproject-yg34.onrender.com/api/book/get-all-books');
-      setBook(res.data);
-      setFilterBook(res.data.bookArray);
-      console.log(res.data.bookArray);
- console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/book/get-all-books');
+        setBook(res.data);
+        setFilterBook(res.data.bookArray);
+        console.log(res.data.bookArray);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  fetchBooks();
-}, []);
+    fetchBooks();
+  }, []);
 
   function handleSelect(e) {
     const selected = e.target.value;
@@ -65,6 +63,7 @@ const BookC = () => {
       </select>
 
       <Swiper
+        watchSlidesProgress={true}
         navigation={true}
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={24}
@@ -78,15 +77,21 @@ const BookC = () => {
             spaceBetween: 20,
           },
           768: {
-            slidesPerView: 2,
+            slidesPerView: 4,
             spaceBetween: 30,
           },
           1024: {
-            slidesPerView: 3,
-            spaceBetween: 40,
+            slidesPerView: 4,
+            spaceBetween: 30,
           }
         }}
-        className="pb-10"
+        className="pb-10 mySwiper"
+        onSlideChange={(swiper) => {
+          const visibleSlides = swiper.slides.filter(slide =>
+            slide.classList.contains('swiper-slide-visible')
+          );
+          console.log('Currently visible slides:', visibleSlides.map(s => s.innerText || s.textContent));
+        }}
       >
         {filterBook.map((val, index) => (
           <SwiperSlide key={index} className="px-2">
@@ -95,7 +100,7 @@ const BookC = () => {
         ))}
       </Swiper>
     </div>
-  );
+  ); 
 };
 
 export default BookC;
